@@ -19,7 +19,7 @@ function App() {
   const fetchShips = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5001/api/ships');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/ships`);
       setShips(response.data);
     } catch (err) {
       setError('Gagal mengambil data dari server.');
@@ -47,7 +47,7 @@ function App() {
 
   const handleSubmitRating = async (ratingData) => {
     try {
-      await axios.post('http://localhost:5001/api/ratings', ratingData);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/ratings`, ratingData);
       alert('Terima kasih atas penilaian Anda!');
       handleCloseModal();
       // Ambil ulang data kapal agar ratingnya terupdate
