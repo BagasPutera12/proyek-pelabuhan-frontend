@@ -1,0 +1,94 @@
+/* frontend/src/App.css */
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  margin: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 20px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  color: #0d47a1;
+}
+
+.ship-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.ship-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.ship-photo {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.ship-card h3 {
+  margin: 15px 15px 5px 15px;
+}
+
+.description {
+  margin: 0 15px 15px 15px;
+  font-size: 0.9rem;
+  color: #666;
+  flex-grow: 1; /* Mendorong tombol ke bawah */
+}
+
+.rating {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0 15px 15px 15px;
+}
+
+.links {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 15px 15px 15px;
+}
+
+.links a {
+  text-decoration: none;
+  color: #1e88e5;
+  font-weight: bold;
+}
+
+.survey-button {
+  background-color: #1e88e5;
+  color: white;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.survey-button:hover {
+  background-color: #1565c0;
+}
