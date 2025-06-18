@@ -92,3 +92,25 @@ header h1 {
 .survey-button:hover {
   background-color: #1565c0;
 }
+/* frontend/src/App.css - Tambahkan di paling bawah */
+
+/* Menghilangkan gaya default dari link pada kartu kapal */
+.ship-card-link {
+  text-decoration: none;
+  color: inherit; /* Mewarisi warna teks dari parent */
+  display: block; /* Membuat link mengisi seluruh area kartu */
+}
+
+/* Memindahkan beberapa elemen ke dalam container agar padding konsisten */
+.container .page-title {
+    text-align: center;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+}
+
+.container .page-title h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    color: #0d47a1;
+}
