@@ -1,10 +1,10 @@
-// frontend/src/pages/ShipDetailPage.jsx (VERSI FINAL DENGAN TABEL)
+// frontend/src/pages/ShipDetailPage.jsx (VERSI FINAL SESUAI DATA BARU)
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import SurveyModal from '../components/SurveyModal';
-import './ShipDetailPage.css';
+import './ShipDetailPage.css'; // Kita akan gunakan CSS yang sama
 
 function ShipDetailPage() {
   const { id } = useParams();
@@ -13,13 +13,12 @@ function ShipDetailPage() {
   const [ratings, setRatings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchShipDetails = useCallback(async () => {
     try {
-      setLoading(true); 
-      const response = await axios.get(`<span class="math-inline">\{import\.meta\.env\.VITE\_API\_URL\}/api/ships/</span>{id}`);
+      setLoading(true);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/ships/${id}`);
       if (response.data && response.data.ship) {
         setShip(response.data.ship);
         setRatings(response.data.ratings || []);
@@ -27,7 +26,7 @@ function ShipDetailPage() {
         throw new Error("Format data tidak sesuai");
       }
     } catch (err) {
-      setError('Gagal memuat detail kapal. Mungkin kapal tidak ditemukan.');
+      setError('Gagal memuat detail kapal. Pastikan ID benar dan server berjalan.');
       console.error("Error fetching ship details:", err);
     } finally {
       setLoading(false);
@@ -60,70 +59,23 @@ function ShipDetailPage() {
           <h1>{ship.name}</h1>
         </header>
 
-        <img 
-          src={ship.photo || 'https://placehold.co/1200x600?text=Foto+Kapal'} 
-          alt={`Foto ${ship.name}`}
-          className="ship-main-image"
-        />
-
+        {/* Kita akan menampilkan detail dalam bentuk daftar, bukan tabel */}
         <section className="ship-info-section">
-          <h2>Deskripsi & Informasi</h2>
-          <p className="ship-description">{ship.description || 'Tidak ada deskripsi.'}</p>
-
-          {ship.schedule_info && (
-              <>
-                  <h3>Jadwal & Rute</h3>
-                  <p>{ship.schedule_info}</p>
-              </>
-          )}
-
-          {/* --- BAGIAN BARU UNTUK MENAMPILKAN TABEL --- */}
-          {ship.portActivities && ship.portActivities.length > 0 && (
-            <div className="activities-table-container">
-              <h3>Jadwal Aktivitas Kapal</h3>
-              <table className="activities-table">
-                <thead>
-                  <tr>
-                    <th>NO</th>
-                    <th>NAMA KAPAL</th>
-                    <th>GT / LOA</th>
-                    <th>AGEN</th>
-                    <th>LABUH</th>
-                    <th>RENCANA SANDAR</th>
-                    <th>KOMODITI</th>
-                    <th>BONGKAR / MUAT</th>
-                    <th>ASAL - TUJUAN</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ship.portActivities.map((activity, index) => (
-                    <tr key={index}>
-                      <td>{activity.no}</td>
-                      <td>{activity.namaKapal}</td>
-                      <td>{activity.gtLoa}</td>
-                      <td>{activity.agen}</td>
-                      <td>{activity.labuh}</td>
-                      <td>{activity.rencanaSandar}</td>
-                      <td>{activity.komoditi}</td>
-                      <td>{activity.bongkarMuat}</td>
-                      <td>{activity.asalTujuan}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-          {/* --- AKHIR BAGIAN BARU --- */}
-
-          <div className="ship-actions">
-            <a href={ship.ticket_url} target="_blank" rel="noopener noreferrer" className="ticket-link">Pesan Tiket</a>
-            <a href={ship.vessel_finder_url} target="_blank" rel="noopener noreferrer" className="track-link">Lacak Kapal</a>
+          <h2>Detail Aktivitas Kapal</h2>
+          <div className="details-grid">
+            <div className="detail-item"><strong>GT / LOA:</strong><span>{ship.gtLoa || 'N/A'}</span></div>
+            <div className="detail-item"><strong>Agen:</strong><span>{ship.agen || 'N/A'}</span></div>
+            <div className="detail-item"><strong>Waktu Labuh:</strong><span>{ship.labuh || 'N/A'}</span></div>
+            <div className="detail-item"><strong>Rencana Sandar:</strong><span>{ship.rencanaSandar || 'N/A'}</span></div>
+            <div className="detail-item"><strong>Komoditi:</strong><span>{ship.komoditi || 'N/A'}</span></div>
+            <div className="detail-item"><strong>Bongkar / Muat:</strong><span>{ship.bongkarMuat || 'N/A'}</span></div>
+            <div className="detail-item full-width"><strong>Asal - Tujuan:</strong><span>{ship.asalTujuan || 'N/A'}</span></div>
           </div>
         </section>
 
         <section className="ship-ratings-section">
           <div className="ratings-header">
-            <h2>History Penilaian</h2>
+            <h2>History Penilaian Pengguna</h2>
             <button className="give-rating-button" onClick={() => setIsModalOpen(true)}>
               Beri Penilaian
             </button>
@@ -141,11 +93,11 @@ function ShipDetailPage() {
               </div>
             ))
           ) : (
-            <p>Belum ada penilaian untuk kapal ini. Jadilah yang pertama!</p>
+            <p>Belum ada penilaian untuk kapal ini.</p>
           )}
         </section>
       </div>
-
+      
       {isModalOpen && (
         <SurveyModal
           ship={ship}
