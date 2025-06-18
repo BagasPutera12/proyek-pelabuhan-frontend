@@ -138,3 +138,22 @@
   color: #555;
   margin: 0;
 }
+
+/* Tambahkan di paling bawah file ShipDetailPage.css */
+
+.delete-button {
+    background-color: #dc3545; /* Warna merah untuk bahaya */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-left: 10px;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}

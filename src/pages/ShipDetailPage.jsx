@@ -1,13 +1,15 @@
-// frontend/src/pages/ShipDetailPage.jsx (VERSI FINAL LENGKAP)
+// frontend/src/pages/ShipDetailPage.jsx (FINAL DENGAN FOTO & DELETE)
 
 import { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+// 1. Impor useNavigate untuk pindah halaman setelah hapus
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import SurveyModal from '../components/SurveyModal';
 import './ShipDetailPage.css';
 
 function ShipDetailPage() {
   const { id } = useParams();
+  const navigate = useNavigate(); // 2. Inisialisasi hook navigasi
 
   const [ship, setShip] = useState(null);
   const [ratings, setRatings] = useState([]);
@@ -15,7 +17,6 @@ function ShipDetailPage() {
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // --- INI LOGIKA PENTING YANG KITA KEMBALIKAN ---
   const fetchShipDetails = useCallback(async () => {
     try {
       setLoading(true); 
@@ -37,16 +38,33 @@ function ShipDetailPage() {
   useEffect(() => {
     fetchShipDetails();
   }, [fetchShipDetails]);
-  // --- AKHIR LOGIKA PENTING ---
-
+  
   const handleSubmitRating = async (ratingData) => {
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/ratings`, { ...ratingData, shipId: id });
       setIsModalOpen(false);
-      fetchShipDetails(); // Ambil ulang data untuk menampilkan rating terbaru
+      fetchShipDetails();
     } catch (err) {
       alert('Gagal mengirim penilaian. Mohon coba lagi.');
       console.error(err);
+    }
+  };
+
+  // 3. FUNGSI BARU UNTUK MENGHAPUS KAPAL
+  const handleDeleteShip = async () => {
+    // Minta konfirmasi sebelum menghapus untuk keamanan
+    const isConfirmed = window.confirm(`Apakah Anda yakin ingin menghapus data kapal "${ship.name}"? Aksi ini tidak bisa dibatalkan.`);
+    
+    if (isConfirmed) {
+      try {
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/ships/${id}`);
+        alert('Data kapal berhasil dihapus.');
+        // Arahkan pengguna kembali ke halaman utama setelah berhasil hapus
+        navigate('/');
+      } catch (err) {
+        alert('Gagal menghapus kapal.');
+        console.error("Error deleting ship:", err);
+      }
     }
   };
 
@@ -60,6 +78,15 @@ function ShipDetailPage() {
         <header className="ship-detail-header">
           <h1>{ship.name}</h1>
         </header>
+
+        {/* 4. TAMPILKAN FOTO KAPAL DI SINI */}
+        {ship.photo && (
+          <img 
+            src={ship.photo} 
+            alt={`Foto ${ship.name}`}
+            className="ship-main-image"
+          />
+        )}
 
         <section className="ship-info-section">
           <h2>Detail Aktivitas & Informasi</h2>
@@ -82,9 +109,15 @@ function ShipDetailPage() {
         <section className="ship-ratings-section">
           <div className="ratings-header">
             <h2>History Penilaian Pengguna</h2>
-            <button className="give-rating-button" onClick={() => setIsModalOpen(true)}>
-              Beri Penilaian
-            </button>
+            <div>
+              <button className="give-rating-button" onClick={() => setIsModalOpen(true)}>
+                Beri Penilaian
+              </button>
+              {/* 5. TAMBAHKAN TOMBOL HAPUS DI SINI */}
+              <button className="delete-button" onClick={handleDeleteShip}>
+                Hapus Kapal
+              </button>
+            </div>
           </div>
           {ratings.length > 0 ? (
             ratings.map((rating) => (
