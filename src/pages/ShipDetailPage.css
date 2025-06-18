@@ -117,3 +117,36 @@
   font-style: italic;
   color: #555;
 }
+/* frontend/src/pages/ShipDetailPage.css - Tambahkan di paling bawah */
+
+.activities-table-container {
+  margin-top: 30px;
+  overflow-x: auto; /* Memungkinkan scroll horizontal di layar kecil */
+}
+
+.activities-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.activities-table th, .activities-table td {
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+  text-align: left;
+  white-space: nowrap; /* Mencegah teks turun baris */
+}
+
+.activities-table thead {
+  background-color: #0d47a1;
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.activities-table tbody tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.activities-table tbody tr:hover {
+  background-color: #e9ecef;
+}

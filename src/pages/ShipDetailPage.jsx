@@ -1,4 +1,4 @@
-// frontend/src/pages/ShipDetailPage.jsx (VERSI FINAL BERSIH)
+// frontend/src/pages/ShipDetailPage.jsx (VERSI FINAL DENGAN TABEL)
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
@@ -13,19 +13,18 @@ function ShipDetailPage() {
   const [ratings, setRatings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchShipDetails = useCallback(async () => {
     try {
-      setLoading(true);
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/ships/${id}`);
-      
+      setLoading(true); 
+      const response = await axios.get(`<span class="math-inline">\{import\.meta\.env\.VITE\_API\_URL\}/api/ships/</span>{id}`);
       if (response.data && response.data.ship) {
         setShip(response.data.ship);
         setRatings(response.data.ratings || []);
       } else {
-        throw new Error("Format data dari server tidak sesuai");
+        throw new Error("Format data tidak sesuai");
       }
     } catch (err) {
       setError('Gagal memuat detail kapal. Mungkin kapal tidak ditemukan.');
@@ -43,7 +42,7 @@ function ShipDetailPage() {
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/ratings`, { ...ratingData, shipId: id });
       setIsModalOpen(false);
-      fetchShipDetails(); // Ambil ulang data untuk menampilkan rating terbaru
+      fetchShipDetails();
     } catch (err) {
       alert('Gagal mengirim penilaian. Mohon coba lagi.');
       console.error(err);
@@ -70,13 +69,51 @@ function ShipDetailPage() {
         <section className="ship-info-section">
           <h2>Deskripsi & Informasi</h2>
           <p className="ship-description">{ship.description || 'Tidak ada deskripsi.'}</p>
-          
+
           {ship.schedule_info && (
               <>
                   <h3>Jadwal & Rute</h3>
                   <p>{ship.schedule_info}</p>
               </>
           )}
+
+          {/* --- BAGIAN BARU UNTUK MENAMPILKAN TABEL --- */}
+          {ship.portActivities && ship.portActivities.length > 0 && (
+            <div className="activities-table-container">
+              <h3>Jadwal Aktivitas Kapal</h3>
+              <table className="activities-table">
+                <thead>
+                  <tr>
+                    <th>NO</th>
+                    <th>NAMA KAPAL</th>
+                    <th>GT / LOA</th>
+                    <th>AGEN</th>
+                    <th>LABUH</th>
+                    <th>RENCANA SANDAR</th>
+                    <th>KOMODITI</th>
+                    <th>BONGKAR / MUAT</th>
+                    <th>ASAL - TUJUAN</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ship.portActivities.map((activity, index) => (
+                    <tr key={index}>
+                      <td>{activity.no}</td>
+                      <td>{activity.namaKapal}</td>
+                      <td>{activity.gtLoa}</td>
+                      <td>{activity.agen}</td>
+                      <td>{activity.labuh}</td>
+                      <td>{activity.rencanaSandar}</td>
+                      <td>{activity.komoditi}</td>
+                      <td>{activity.bongkarMuat}</td>
+                      <td>{activity.asalTujuan}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          {/* --- AKHIR BAGIAN BARU --- */}
 
           <div className="ship-actions">
             <a href={ship.ticket_url} target="_blank" rel="noopener noreferrer" className="ticket-link">Pesan Tiket</a>
@@ -108,7 +145,7 @@ function ShipDetailPage() {
           )}
         </section>
       </div>
-      
+
       {isModalOpen && (
         <SurveyModal
           ship={ship}
