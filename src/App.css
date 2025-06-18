@@ -67,8 +67,9 @@ header h1 {
 
 .links {
   display: flex;
-  justify-content: space-between;
-  margin: 0 15px 15px 15px;
+  justify-content: space-around; /* atau space-between */
+  padding: 10px 15px;
+  border-top: 1px solid #eee;
 }
 
 .links a {
