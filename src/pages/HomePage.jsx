@@ -43,7 +43,7 @@ function HomePage() {
   return (
     <div className="container">
       <header className="page-title">
-        <h1>Rating Kapal Penumpang</h1>
+        <h1>Website Rating Kapal</h1>
         <p>Pelabuhan Teluk Bayur</p>
       </header>
       <div className="ship-list">
