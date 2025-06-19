@@ -1,7 +1,6 @@
-// frontend/src/pages/ShipDetailPage.jsx (FINAL TANPA FITUR DELETE)
+// frontend/src/pages/ShipDetailPage.jsx (KODE FINAL YANG SUDAH DIPERBAIKI)
 
 import { useState, useEffect, useCallback } from 'react';
-// useNavigate sudah tidak diperlukan, jadi kita hapus
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import SurveyModal from '../components/SurveyModal';
@@ -9,7 +8,6 @@ import './ShipDetailPage.css';
 
 function ShipDetailPage() {
   const { id } = useParams();
-  // 'navigate' sudah tidak diperlukan, jadi kita hapus
 
   const [ship, setShip] = useState(null);
   const [ratings, setRatings] = useState([]);
@@ -19,13 +17,15 @@ function ShipDetailPage() {
 
   const fetchShipDetails = useCallback(async () => {
     try {
-      setLoading(true); 
-      const response = await axios.get(`<span class="math-inline">\{import\.meta\.env\.VITE\_API\_URL\}/api/ships/</span>{id}`);
+      setLoading(true);
+      // --- INI ADALAH BARIS YANG KITA PERBAIKI ---
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/ships/${id}`);
+      
       if (response.data && response.data.ship) {
         setShip(response.data.ship);
         setRatings(response.data.ratings || []);
       } else {
-        throw new Error("Format data tidak sesuai");
+        throw new Error("Format data dari server tidak sesuai");
       }
     } catch (err) {
       setError('Gagal memuat detail kapal. Mungkin kapal tidak ditemukan.');
@@ -38,7 +38,7 @@ function ShipDetailPage() {
   useEffect(() => {
     fetchShipDetails();
   }, [fetchShipDetails]);
-
+  
   const handleSubmitRating = async (ratingData) => {
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/ratings`, { ...ratingData, shipId: id });
@@ -49,8 +49,6 @@ function ShipDetailPage() {
       console.error(err);
     }
   };
-
-  // Fungsi handleDeleteShip sudah dihapus seluruhnya
 
   if (loading) return <div className="container"><h1>Memuat Detail Kapal...</h1></div>;
   if (error) return <div className="container"><h1>{error}</h1></div>;
@@ -75,7 +73,6 @@ function ShipDetailPage() {
         <section className="ship-info-section">
           <h2>Detail Aktivitas & Informasi</h2>
           <div className="details-grid">
-            {/* ... bagian detail grid tidak berubah ... */}
             <div className="detail-item"><strong>GT / LOA:</strong><span>{ship.gtLoa || 'N/A'}</span></div>
             <div className="detail-item"><strong>Agen:</strong><span>{ship.agen || 'N/A'}</span></div>
             <div className="detail-item"><strong>Waktu Labuh:</strong><span>{ship.labuh || 'N/A'}</span></div>
@@ -84,7 +81,7 @@ function ShipDetailPage() {
             <div className="detail-item"><strong>Bongkar / Muat:</strong><span>{ship.bongkarMuat || 'N/A'}</span></div>
             <div className="detail-item full-width"><strong>Asal - Tujuan:</strong><span>{ship.asalTujuan || 'N/A'}</span></div>
           </div>
-
+          
           <div className="ship-actions">
             <a href={ship.ticket_url} target="_blank" rel="noopener noreferrer" className="ticket-link">Pesan Tiket</a>
             <a href={ship.vessel_finder_url} target="_blank" rel="noopener noreferrer" className="track-link">Lacak Kapal</a>
@@ -97,7 +94,6 @@ function ShipDetailPage() {
             <button className="give-rating-button" onClick={() => setIsModalOpen(true)}>
               Beri Penilaian
             </button>
-            {/* Tombol Hapus Kapal sudah dihapus dari sini */}
           </div>
           {ratings.length > 0 ? (
             ratings.map((rating) => (
@@ -115,7 +111,7 @@ function ShipDetailPage() {
           )}
         </section>
       </div>
-
+      
       {isModalOpen && (
         <SurveyModal
           ship={ship}
