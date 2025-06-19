@@ -36,3 +36,7 @@
 .main-nav a:hover {
   color: #1e88e5;
 }
+/* Tambahkan di paling bawah Header.css */
+.logo-link {
+  text-decoration: none;
+}

@@ -1,15 +1,15 @@
-// frontend/src/pages/ShipDetailPage.jsx (FINAL DENGAN FOTO & DELETE)
+// frontend/src/pages/ShipDetailPage.jsx (FINAL TANPA FITUR DELETE)
 
 import { useState, useEffect, useCallback } from 'react';
-// 1. Impor useNavigate untuk pindah halaman setelah hapus
-import { useParams, useNavigate } from 'react-router-dom';
+// useNavigate sudah tidak diperlukan, jadi kita hapus
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import SurveyModal from '../components/SurveyModal';
 import './ShipDetailPage.css';
 
 function ShipDetailPage() {
   const { id } = useParams();
-  const navigate = useNavigate(); // 2. Inisialisasi hook navigasi
+  // 'navigate' sudah tidak diperlukan, jadi kita hapus
 
   const [ship, setShip] = useState(null);
   const [ratings, setRatings] = useState([]);
@@ -20,7 +20,7 @@ function ShipDetailPage() {
   const fetchShipDetails = useCallback(async () => {
     try {
       setLoading(true); 
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/ships/${id}`);
+      const response = await axios.get(`<span class="math-inline">\{import\.meta\.env\.VITE\_API\_URL\}/api/ships/</span>{id}`);
       if (response.data && response.data.ship) {
         setShip(response.data.ship);
         setRatings(response.data.ratings || []);
@@ -38,7 +38,7 @@ function ShipDetailPage() {
   useEffect(() => {
     fetchShipDetails();
   }, [fetchShipDetails]);
-  
+
   const handleSubmitRating = async (ratingData) => {
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/ratings`, { ...ratingData, shipId: id });
@@ -50,23 +50,7 @@ function ShipDetailPage() {
     }
   };
 
-  // 3. FUNGSI BARU UNTUK MENGHAPUS KAPAL
-  const handleDeleteShip = async () => {
-    // Minta konfirmasi sebelum menghapus untuk keamanan
-    const isConfirmed = window.confirm(`Apakah Anda yakin ingin menghapus data kapal "${ship.name}"? Aksi ini tidak bisa dibatalkan.`);
-    
-    if (isConfirmed) {
-      try {
-        await axios.delete(`${import.meta.env.VITE_API_URL}/api/ships/${id}`);
-        alert('Data kapal berhasil dihapus.');
-        // Arahkan pengguna kembali ke halaman utama setelah berhasil hapus
-        navigate('/');
-      } catch (err) {
-        alert('Gagal menghapus kapal.');
-        console.error("Error deleting ship:", err);
-      }
-    }
-  };
+  // Fungsi handleDeleteShip sudah dihapus seluruhnya
 
   if (loading) return <div className="container"><h1>Memuat Detail Kapal...</h1></div>;
   if (error) return <div className="container"><h1>{error}</h1></div>;
@@ -79,18 +63,19 @@ function ShipDetailPage() {
           <h1>{ship.name}</h1>
         </header>
 
-        {/* 4. TAMPILKAN FOTO KAPAL DI SINI */}
         {ship.photo && (
           <img 
             src={ship.photo} 
             alt={`Foto ${ship.name}`}
             className="ship-main-image"
+            onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/1200x600?text=Gambar+Tidak+Tersedia";}}
           />
         )}
 
         <section className="ship-info-section">
           <h2>Detail Aktivitas & Informasi</h2>
           <div className="details-grid">
+            {/* ... bagian detail grid tidak berubah ... */}
             <div className="detail-item"><strong>GT / LOA:</strong><span>{ship.gtLoa || 'N/A'}</span></div>
             <div className="detail-item"><strong>Agen:</strong><span>{ship.agen || 'N/A'}</span></div>
             <div className="detail-item"><strong>Waktu Labuh:</strong><span>{ship.labuh || 'N/A'}</span></div>
@@ -99,7 +84,7 @@ function ShipDetailPage() {
             <div className="detail-item"><strong>Bongkar / Muat:</strong><span>{ship.bongkarMuat || 'N/A'}</span></div>
             <div className="detail-item full-width"><strong>Asal - Tujuan:</strong><span>{ship.asalTujuan || 'N/A'}</span></div>
           </div>
-          
+
           <div className="ship-actions">
             <a href={ship.ticket_url} target="_blank" rel="noopener noreferrer" className="ticket-link">Pesan Tiket</a>
             <a href={ship.vessel_finder_url} target="_blank" rel="noopener noreferrer" className="track-link">Lacak Kapal</a>
@@ -109,15 +94,10 @@ function ShipDetailPage() {
         <section className="ship-ratings-section">
           <div className="ratings-header">
             <h2>History Penilaian Pengguna</h2>
-            <div>
-              <button className="give-rating-button" onClick={() => setIsModalOpen(true)}>
-                Beri Penilaian
-              </button>
-              {/* 5. TAMBAHKAN TOMBOL HAPUS DI SINI */}
-              <button className="delete-button" onClick={handleDeleteShip}>
-                Hapus Kapal
-              </button>
-            </div>
+            <button className="give-rating-button" onClick={() => setIsModalOpen(true)}>
+              Beri Penilaian
+            </button>
+            {/* Tombol Hapus Kapal sudah dihapus dari sini */}
           </div>
           {ratings.length > 0 ? (
             ratings.map((rating) => (
@@ -135,7 +115,7 @@ function ShipDetailPage() {
           )}
         </section>
       </div>
-      
+
       {isModalOpen && (
         <SurveyModal
           ship={ship}
