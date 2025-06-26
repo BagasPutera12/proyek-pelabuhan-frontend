@@ -1,10 +1,27 @@
-// frontend/src/pages/HomePage.jsx (VERSI FINAL LENGKAP)
+// frontend/src/pages/HomePage.jsx (FINAL LENGKAP DENGAN RATING BINTANG)
 
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css'; 
 import PortSurveyModal from '../components/PortSurveyModal';
+
+// 1. KOMPONEN KECIL UNTUK MENAMPILKAN BINTANG
+// Dibuat di sini agar praktis, tugasnya hanya mengubah angka menjadi ikon bintang.
+const StarRatingDisplay = ({ rating }) => {
+  const totalStars = 5;
+  // Bulatkan rating ke angka terdekat untuk menentukan jumlah bintang kuning
+  const filledStars = Math.round(rating); 
+
+  return (
+    <div className="star-rating-display">
+      {[...Array(totalStars)].map((_, index) => (
+        <span key={index} className={index < filledStars ? 'filled' : ''}>★</span>
+      ))}
+    </div>
+  );
+};
+
 
 function HomePage() {
   const [ships, setShips] = useState([]);
@@ -23,18 +40,14 @@ function HomePage() {
       // Jalankan keduanya secara bersamaan untuk efisiensi
       const [shipsResponse, summaryResponse] = await Promise.all([shipsPromise, surveySummaryPromise]);
 
-      // Set state untuk kapal
       if (Array.isArray(shipsResponse.data)) {
         setShips(shipsResponse.data);
       } else {
         setShips([]);
       }
-
-      // Set state untuk ringkasan survei
       if (summaryResponse.data) {
         setSurveySummary(summaryResponse.data);
       }
-
     } catch (err) {
       console.error('Gagal mengambil data:', err);
       setError('Gagal mengambil data dari server. Coba refresh halaman.');
@@ -47,21 +60,23 @@ function HomePage() {
     fetchData();
   }, [fetchData]);
 
-  // Fungsi untuk menutup modal dan refresh data agar saran baru muncul
   const handleCloseSurveyModal = () => {
     setIsPortSurveyModalOpen(false);
     fetchData(); 
   };
 
-  // Fungsi yang akan dipanggil dari dalam modal
-  // Kita tidak perlu memindah logika POST ke sini, modal sudah menanganinya
-  // Kita hanya perlu memastikan data di-refresh setelah modal ditutup
-  const handleSurveySubmit = () => {
-    // Logika ini sekarang ada di dalam PortSurveyModal,
-    // tapi kita tetap butuh fungsi ini untuk di-pass sebagai prop jika diperlukan
-    // Untuk sekarang, kita refresh datanya di onClose
-    console.log("Survei telah dikirim dari modal.");
+  // 2. FUNGSI UNTUK MENGHITUNG RATA-RATA DARI SEMUA ASPEK
+  const calculateOverallAverage = () => {
+    const ratings = surveySummary.averageRatings;
+    if (!ratings || ratings.length === 0) {
+      return 0; // Kembalikan 0 jika tidak ada data rating
+    }
+    const sum = ratings.reduce((total, item) => total + item.averageRating, 0);
+    return sum / ratings.length;
   };
+
+  const overallAverage = calculateOverallAverage();
+
 
   if (loading) return <div className="container"><h1>Loading...</h1></div>;
   if (error) return <div className="container"><h1>{error}</h1></div>;
@@ -69,12 +84,16 @@ function HomePage() {
   return (
     <>
       <div className="container">
+        {/* --- 3. BAGIAN HEADER YANG TELAH DIPERBARUI --- */}
         <header className="page-title">
-          <h1>Website Rating Kapal</h1>
-          <p>Pelabuhan Teluk Bayur</p>
+          <h1>Website Rating Pelabuhan Teluk Bayur</h1>
+          <StarRatingDisplay rating={overallAverage} />
+          <p className="overall-rating-text">
+            Rata-rata Keseluruhan: <strong>{overallAverage.toFixed(2)}</strong> dari 5
+          </p>
         </header>
 
-        {/* Bagian Daftar Kapal */}
+        <h2>Rating per Kapal</h2>
         <div className="ship-list">
           {ships.length > 0 ? (
             ships.map((ship) => (
@@ -116,7 +135,6 @@ function HomePage() {
         {/* Bagian Ringkasan Hasil Survei */}
         <div className="survey-summary-section">
           <h3>Ringkasan Masukan Pengguna</h3>
-          
           <div className="recent-suggestions-list">
             <h4>Saran Terbaru:</h4>
             {surveySummary.recentSuggestions && surveySummary.recentSuggestions.length > 0 ? (
@@ -132,7 +150,6 @@ function HomePage() {
               <p>Belum ada saran yang masuk.</p>
             )}
           </div>
-          
           <Link to="/masukan" className="view-all-button">
             Lihat Semua Masukan & Rata-rata Penilaian
           </Link>
@@ -143,7 +160,6 @@ function HomePage() {
       {isPortSurveyModalOpen && (
         <PortSurveyModal 
           onClose={handleCloseSurveyModal}
-          onSubmit={handleSurveySubmit} // onSubmit bisa di-pass walaupun logika utama ada di dalam modal
         />
       )}
     </>
