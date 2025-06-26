@@ -1,0 +1,105 @@
+/* frontend/src/components/PortSurveyModal.css */
+
+.port-survey-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.port-survey-modal-content {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.port-survey-close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 2.5rem;
+  cursor: pointer;
+  color: #aaa;
+  line-height: 1;
+}
+
+.port-survey-modal-content h2 {
+  text-align: center;
+  margin-top: 0;
+}
+
+.port-survey-questions-container {
+  flex-grow: 1;
+  overflow-y: auto; /* Membuat daftar pertanyaan bisa di-scroll */
+  padding-right: 15px;
+}
+
+.port-survey-question-item {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.port-survey-question-text {
+  margin: 0 0 10px 0;
+  line-height: 1.5;
+}
+
+.port-survey-rating-scale {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rating-button {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.rating-button:hover {
+  border-color: #0d47a1;
+}
+
+.rating-button.selected {
+  background-color: #0d47a1;
+  color: white;
+  border-color: #0d47a1;
+}
+
+.port-survey-submit-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 15px;
+  width: 100%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 4px;
+  margin-top: 20px;
+}
+
+.port-survey-submit-button:hover {
+  background-color: #218838;
+}
