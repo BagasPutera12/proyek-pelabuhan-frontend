@@ -1,0 +1,98 @@
+/* frontend/src/pages/FeedbackPage.css */
+
+.feedback-page-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+@media (min-width: 992px) {
+  .feedback-page-content {
+    grid-template-columns: 1fr 1fr; /* Dua kolom di layar besar */
+  }
+}
+
+.average-ratings-section, .all-suggestions-section {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.average-ratings-section h2, .all-suggestions-section h2 {
+  margin-top: 0;
+  color: #0d47a1;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.rating-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.rating-item:last-child {
+  border-bottom: none;
+}
+
+.rating-question {
+  flex: 1;
+  padding-right: 15px;
+}
+
+.rating-score {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #ff9800;
+  white-space: nowrap;
+}
+
+.suggestion-card-full {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.suggestion-card-full p {
+  margin: 0;
+  color: #333;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* Batasi 3 baris */
+}
+
+.suggestion-card-full p.expanded {
+  -webkit-line-clamp: unset; /* Hapus batasan jika diperluas */
+}
+
+.suggestion-card-full button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  padding: 5px 0 0 0;
+  font-weight: bold;
+  display: block;
+}
+
+.suggestion-card-full small {
+  display: block;
+  margin-top: 10px;
+  color: #6c757d;
+  text-align: right;
+}
+
+.back-to-home-button {
+  display: inline-block;
+  margin-top: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  color: #007bff;
+}

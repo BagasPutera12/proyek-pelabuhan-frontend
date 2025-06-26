@@ -154,3 +154,64 @@ header h1 {
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(255, 193, 7, 0.5);
 }
+/* Tambahkan di paling bawah file App.css */
+
+.survey-summary-section {
+  background-color: #f8f9fa;
+  padding: 30px;
+  margin-top: 20px;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.survey-summary-section h3 {
+  text-align: center;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+}
+
+.recent-suggestions-list {
+  margin-top: 30px;
+}
+
+.suggestion-card {
+  background: #fff;
+  padding: 15px;
+  border-left: 4px solid #1e88e5;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.suggestion-card p {
+  margin: 0;
+  color: #343a40;
+  line-height: 1.6;
+}
+
+.suggestion-card small {
+  display: block;
+  margin-top: 10px;
+  color: #6c757d;
+  text-align: right;
+}
+
+.view-all-button {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  text-align: center;
+  background-color: #e9ecef;
+  color: #495057;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-top: 20px;
+  transition: background-color 0.2s;
+}
+
+.view-all-button:hover {
+  background-color: #dee2e6;
+}

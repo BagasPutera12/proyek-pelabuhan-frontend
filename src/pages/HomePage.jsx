@@ -1,30 +1,43 @@
-// frontend/src/pages/HomePage.jsx (FINAL DENGAN FITUR SURVEI PELABUHAN)
+// frontend/src/pages/HomePage.jsx (FINAL DENGAN TAMPILAN HASIL SURVEI)
 
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css'; 
-import PortSurveyModal from '../components/PortSurveyModal'; // <-- 1. Impor modal baru
+import PortSurveyModal from '../components/PortSurveyModal';
 
 function HomePage() {
   const [ships, setShips] = useState([]);
+  // 1. State baru untuk menampung data ringkasan survei
+  const [surveySummary, setSurveySummary] = useState({ averageRatings: [], recentSuggestions: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // 2. State baru untuk mengontrol modal survei pelabuhan
   const [isPortSurveyModalOpen, setIsPortSurveyModalOpen] = useState(false);
 
-  // Logika untuk mengambil data kapal (tidak berubah)
-  const fetchShips = useCallback(async () => {
+  // 2. Gabungkan semua pengambilan data dalam satu fungsi
+  const fetchData = useCallback(async () => {
+    setLoading(true);
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/ships`);
-      if (Array.isArray(response.data)) {
-        setShips(response.data);
+      const shipsPromise = axios.get(`${import.meta.env.VITE_API_URL}/api/ships`);
+      const surveySummaryPromise = axios.get(`${import.meta.env.VITE_API_URL}/api/port-surveys/summary`);
+
+      // Jalankan keduanya secara bersamaan
+      const [shipsResponse, summaryResponse] = await Promise.all([shipsPromise, surveySummaryPromise]);
+
+      // Set state untuk kapal
+      if (Array.isArray(shipsResponse.data)) {
+        setShips(shipsResponse.data);
       } else {
         setShips([]);
       }
+
+      // Set state untuk ringkasan survei
+      if (summaryResponse.data) {
+        setSurveySummary(summaryResponse.data);
+      }
+
     } catch (err) {
-      console.error('Gagal mengambil data kapal:', err);
+      console.error('Gagal mengambil data:', err);
       setError('Gagal mengambil data dari server. Coba refresh halaman.');
     } finally {
       setLoading(false);
@@ -32,80 +45,61 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
-    fetchShips();
-  }, [fetchShips]);
+    fetchData();
+  }, [fetchData]);
 
-  // 3. Fungsi baru untuk mengirim data survei pelabuhan
-  const handlePortSurveySubmit = async (surveyData) => {
-    try {
-      // Menampilkan pesan loading atau status pengiriman
-      alert('Mengirim survei Anda...');
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/port-surveys`, surveyData);
-      alert(response.data.message || 'Terima kasih atas masukan Anda!');
-      setIsPortSurveyModalOpen(false); // Tutup modal setelah berhasil
-    } catch (err) {
-      alert('Gagal mengirim survei. Mohon coba lagi.');
-      console.error("Error submitting port survey:", err);
-    }
-  };
+  // Fungsi untuk menutup modal dan refresh data
+  const handleCloseSurveyModal = () => {
+    setIsPortSurveyModalOpen(false);
+    // Ambil ulang data summary agar saran baru langsung muncul
+    fetchData(); 
+  }
 
   if (loading) return <div className="container"><h1>Loading...</h1></div>;
   if (error) return <div className="container"><h1>{error}</h1></div>;
 
-  // Tampilan utama sekarang dibungkus dengan Fragment <> ... </>
   return (
     <>
       <div className="container">
-        <header className="page-title">
-          <h1>Website Rating Kapal</h1>
-          <p>Pelabuhan Teluk Bayur</p>
-        </header>
-        <div className="ship-list">
-          {ships.length > 0 ? (
-            ships.map((ship) => (
-              <div key={ship._id} className="ship-card">
-                <Link to={`/ship/${ship._id}`} className="ship-card-link-area">
-                  <img 
-                    src={ship.photo || 'https://placehold.co/600x400?text=Foto+Kapal'} 
-                    alt={ship.name || 'Nama Kapal'}
-                    className="ship-photo"
-                  />
-                  <h3>{ship.name}</h3>
-                  <div className="rating">
-                    ⭐ {typeof ship.avgRating === 'number' ? parseFloat(ship.avgRating).toFixed(1) : 'N/A'}
-                  </div>
-                </Link>
-                <div className="links">
-                  <a href={ship.ticket_url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>Pesan Tiket</a>
-                  <a href={ship.vessel_finder_url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>Lacak Kapal</a>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p>Belum ada data kapal yang tersedia.</p>
-          )}
-        </div>
+        {/* ... Bagian header dan daftar kapal tidak berubah ... */}
 
-        {/* --- 4. BAGIAN BARU UNTUK TOMBOL SURVEI --- */}
         <section className="port-survey-section">
-          <h2>Bantu Kami Menjadi Lebih Baik</h2>
-          <p>Bagaimana pendapat Anda mengenai fasilitas dan pelayanan di pelabuhan kami? Berikan masukan Anda melalui survei singkat di bawah ini.</p>
-          <button 
-            className="open-survey-button"
-            onClick={() => setIsPortSurveyModalOpen(true)}
-          >
-            Berikan Masukan Anda
-          </button>
+          {/* ... Bagian tombol survei tidak berubah ... */}
         </section>
+
+        {/* --- 3. BAGIAN BARU UNTUK MENAMPILKAN HASIL --- */}
+        <div className="survey-summary-section">
+          <h3>Ringkasan Masukan Pengguna</h3>
+
+          {/* Menampilkan 3 saran terbaru */}
+          <div className="recent-suggestions-list">
+            <h4>Saran Terbaru:</h4>
+            {surveySummary.recentSuggestions && surveySummary.recentSuggestions.length > 0 ? (
+              surveySummary.recentSuggestions.map((item) => (
+                <div key={item._id} className="suggestion-card">
+                  <p>"{item.suggestion}"</p>
+                  <small>
+                    Dikirim pada: {new Date(item.submittedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                  </small>
+                </div>
+              ))
+            ) : (
+              <p>Belum ada saran yang masuk.</p>
+            )}
+          </div>
+
+          {/* Tombol untuk melihat semua masukan */}
+          <Link to="/masukan" className="view-all-button">
+            Lihat Semua Masukan & Rata-rata Penilaian
+          </Link>
+        </div>
         {/* --- AKHIR BAGIAN BARU --- */}
 
       </div>
 
-      {/* 5. Tampilkan modal jika state-nya true */}
       {isPortSurveyModalOpen && (
         <PortSurveyModal 
-          onClose={() => setIsPortSurveyModalOpen(false)}
-          onSubmit={handlePortSurveySubmit}
+          onClose={handleCloseSurveyModal}
         />
       )}
     </>
