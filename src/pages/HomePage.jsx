@@ -89,7 +89,7 @@ function HomePage() {
           <h1>Website Rating Pelabuhan Teluk Bayur</h1>
           <StarRatingDisplay rating={overallAverage} />
           <p className="overall-rating-text">
-            Rata-rata Keseluruhan: <strong>{overallAverage.toFixed(2)}</strong> dari 5
+            Rating Pelabuhan: <strong>{overallAverage.toFixed(2)}</strong> dari 5
           </p>
         </header>
 
