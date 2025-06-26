@@ -103,3 +103,27 @@
 .port-survey-submit-button:hover {
   background-color: #218838;
 }
+/* Tambahkan di paling bawah file PortSurveyModal.css */
+
+.port-survey-suggestion-area {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.port-survey-suggestion-area label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.port-survey-suggestion-area textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+}

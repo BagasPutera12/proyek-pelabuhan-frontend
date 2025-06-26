@@ -1,9 +1,8 @@
-// frontend/src/components/PortSurveyModal.jsx
+// frontend/src/components/PortSurveyModal.jsx (DENGAN KOLOM SARAN)
 
 import { useState } from 'react';
 import './PortSurveyModal.css';
 
-// Daftar pertanyaan kita simpan di sini
 const surveyQuestions = [
   "Informasi dan fasilitas keselamatan seperti alat pemadam dan jalur evakuasi tersedia.",
   "Fasilitas kesehatan darurat seperti P3K, tandu, kursi roda, dan petugas tersedia.",
@@ -32,27 +31,30 @@ const surveyQuestions = [
 ];
 
 function PortSurveyModal({ onClose, onSubmit }) {
-  // State untuk menyimpan jawaban, formatnya { indexPertanyaan: rating }
   const [answers, setAnswers] = useState({});
+  // --- 1. STATE BARU UNTUK MENAMPUNG SARAN ---
+  const [suggestion, setSuggestion] = useState('');
 
   const handleRatingChange = (questionIndex, rating) => {
     setAnswers(prev => ({ ...prev, [questionIndex]: rating }));
   };
 
   const handleSubmit = () => {
-    // Cek apakah semua pertanyaan sudah dijawab
     if (Object.keys(answers).length < surveyQuestions.length) {
-      alert('Mohon jawab semua pertanyaan sebelum mengirimkan.');
+      alert('Mohon jawab semua pertanyaan rating sebelum mengirimkan.');
       return;
     }
 
-    // Ubah format data sebelum dikirim ke parent
     const formattedAnswers = surveyQuestions.map((questionText, index) => ({
       questionText: questionText,
       rating: answers[index]
     }));
 
-    onSubmit({ answers: formattedAnswers });
+    // --- 2. SERTAKAN 'suggestion' SAAT MENGIRIM DATA ---
+    onSubmit({ 
+      answers: formattedAnswers,
+      suggestion: suggestion 
+    });
   };
 
   return (
@@ -78,6 +80,20 @@ function PortSurveyModal({ onClose, onSubmit }) {
               </div>
             </div>
           ))}
+
+          {/* --- 3. TAMBAHKAN KOLOM TEXTAREA UNTUK SARAN --- */}
+          <div className="port-survey-suggestion-area">
+            <label htmlFor="suggestion">Saran dan Masukan Lainnya (Opsional)</label>
+            <textarea
+              id="suggestion"
+              rows="4"
+              placeholder="Tulis saran Anda di sini..."
+              value={suggestion}
+              onChange={(e) => setSuggestion(e.target.value)}
+            ></textarea>
+          </div>
+          {/* --- AKHIR BAGIAN BARU --- */}
+
         </div>
         <button className="port-survey-submit-button" onClick={handleSubmit}>
           Kirim Masukan
