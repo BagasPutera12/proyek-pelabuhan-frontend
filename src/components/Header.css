@@ -1,7 +1,8 @@
-/* frontend/src/components/Header.css */
+/* frontend/src/components/Header.css (VERSI BARU DENGAN TEMA BIRU) */
 
 .app-header {
-  background-color: #ffffff;
+  /* 1. Mengubah latar belakang menjadi biru tua */
+  background-color: var(--primary-blue); 
   padding: 0 40px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: sticky;
@@ -18,25 +19,28 @@
   height: 70px;
 }
 
+.logo-link {
+  text-decoration: none;
+}
+
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #0d47a1;
+  /* 2. Mengubah warna teks logo menjadi putih */
+  color: var(--white); 
 }
 
 .main-nav a {
   margin-left: 30px;
   text-decoration: none;
-  color: #333;
+  /* 3. Mengubah warna link navigasi menjadi putih */
+  color: rgba(255, 255, 255, 0.85); 
   font-weight: 500;
   font-size: 1rem;
   transition: color 0.2s;
 }
 
+/* 4. Mengubah warna saat disentuh mouse agar lebih kontras */
 .main-nav a:hover {
-  color: #1e88e5;
-}
-/* Tambahkan di paling bawah Header.css */
-.logo-link {
-  text-decoration: none;
+  color: var(--accent-gold); 
 }
