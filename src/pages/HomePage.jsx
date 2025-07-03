@@ -1,5 +1,4 @@
-// frontend/src/pages/HomePage.jsx (FINAL DENGAN MODAL DINAMIS)
-
+// frontend/src/pages/HomePage.jsx
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -23,13 +22,11 @@ function HomePage() {
   const [summary, setSummary] = useState({ overallAverage: 0, aspectAverages: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // State untuk mengelola modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAspect, setSelectedAspect] = useState(null);
 
   const fetchData = useCallback(async () => {
-    // Jangan set loading di sini agar tidak berkedip saat refresh data
+    setLoading(true);
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/aspect-ratings/summary`);
       if (response.data) {
@@ -47,22 +44,19 @@ function HomePage() {
     fetchData();
   }, [fetchData]);
 
-  // Fungsi untuk membuka modal dengan data aspek yang diklik
   const handleOpenModal = (aspect) => {
     setSelectedAspect(aspect);
     setIsModalOpen(true);
   };
 
-  // Fungsi untuk menutup modal dan me-refresh data
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedAspect(null);
-    // Ambil data terbaru setelah survei ditutup untuk update rating
     fetchData(); 
   };
 
-  if (loading) return <div className="container"><h1>Loading...</h1></div>;
-  if (error) return <div className="container"><h1>{error}</h1></div>;
+  if (loading) return <div className="container" style={{textAlign: 'center'}}><h1>Loading...</h1></div>;
+  if (error) return <div className="container" style={{textAlign: 'center'}}><h1>{error}</h1></div>;
 
   return (
     <>
@@ -70,7 +64,7 @@ function HomePage() {
         <section className="hero-section">
           <h1>Website Rating Pelabuhan Teluk Bayur</h1>
           <p className="intro-text">
-            Pelabuhan Teluk Bayur, yang terletak di Kota Padang, Sumatera Barat, merupakan salah satu pelabuhan tertua di Indonesia... (dst)
+            Pelabuhan Teluk Bayur, yang terletak di Kota Padang, Sumatera Barat, merupakan salah satu pelabuhan tertua di Indonesia dan pintu gerbang utama arus barang ekspor-impor di wilayah barat Sumatera. Dibangun sejak 1893 dan kini dikelola oleh PT Pelindo (Persero), pelabuhan ini telah menerapkan standar pelayanan berbasis ISO 9002. Survei ini disusun berdasarkan Peraturan Menteri Perhubungan Nomor PM 37 Tahun 2015 tentang Indeks Kepuasan Pengguna Jasa, guna mengukur dan meningkatkan kualitas pelayanan pelabuhan secara berkelanjutan.
           </p>
           <div className="overall-rating-summary">
             <StarRatingDisplay rating={summary.overallAverage} />
@@ -86,9 +80,7 @@ function HomePage() {
             {ASPECTS.map((aspect) => {
               const aspectData = summary.aspectAverages.find(a => a.aspect === aspect.name);
               const rating = aspectData ? aspectData.averageRating : 0;
-
               return (
-                // Tambahkan onClick di sini
                 <div key={aspect.name} className="aspect-card" onClick={() => handleOpenModal(aspect)}>
                   <h3>{aspect.name}</h3>
                   <StarRatingDisplay rating={rating} />
@@ -100,7 +92,6 @@ function HomePage() {
         </main>
       </div>
 
-      {/* Render modal dengan prop yang benar */}
       {isModalOpen && (
         <PortSurveyModal 
           aspect={selectedAspect}
