@@ -1,4 +1,4 @@
-// frontend/src/pages/HomePage.jsx (PERBAIKAN FINAL UNTUK HEROKU)
+// frontend/src/pages/HomePage.jsx (FINAL DENGAN PENGECEKAN KEAMANAN)
 
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
@@ -28,24 +28,16 @@ function HomePage() {
   const [selectedAspect, setSelectedAspect] = useState(null);
 
   const fetchData = useCallback(async () => {
-    // Jangan set loading di sini agar tidak berkedip saat refresh
     try {
-      // --- BAGIAN YANG DIUBAH ---
-      // Minta data kapal, tunggu sampai selesai.
       const shipsResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/ships`);
+      const summaryResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/aspect-ratings/summary`);
+
       if (Array.isArray(shipsResponse.data)) {
         setShips(shipsResponse.data);
-      } else {
-        setShips([]);
       }
-
-      // SETELAH data kapal selesai, BARU minta data summary.
-      const summaryResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/port-surveys/summary`);
       if (summaryResponse.data) {
         setSummary(summaryResponse.data);
       }
-      // --- AKHIR BAGIAN YANG DIUBAH ---
-
     } catch (err) {
       console.error('Gagal mengambil data:', err);
       setError('Gagal mengambil data dari server. Coba refresh halaman.');
@@ -55,7 +47,6 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
-    // Kita panggil fetchData hanya sekali saat halaman dimuat
     setLoading(true);
     fetchData();
   }, [fetchData]);
@@ -94,8 +85,12 @@ function HomePage() {
           <h2 className="aspects-title">Klik untuk Memberi Penilaian per Aspek</h2>
           <div className="aspects-grid">
             {ASPECTS.map((aspect) => {
-              const aspectData = summary.aspectAverages.find(a => a.aspect === aspect.name);
+              // --- BAGIAN PERBAIKAN UTAMA ---
+              // Tambahkan '|| []' sebagai fallback jika summary.aspectAverages belum ada
+              // Ini mencegah error .find() pada data yang 'undefined'
+              const aspectData = (summary.aspectAverages || []).find(a => a.aspect === aspect.name);
               const rating = aspectData ? aspectData.averageRating : 0;
+              // --- AKHIR BAGIAN PERBAIKAN ---
 
               return (
                 <div key={aspect.name} className="aspect-card" onClick={() => handleOpenModal(aspect)}>
