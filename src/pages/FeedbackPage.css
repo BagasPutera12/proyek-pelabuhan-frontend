@@ -7,22 +7,23 @@
   margin-top: 30px;
 }
 
+/* Di layar besar, buat jadi dua kolom */
 @media (min-width: 992px) {
   .feedback-page-content {
-    grid-template-columns: 1fr 1fr; /* Dua kolom di layar besar */
+    grid-template-columns: 1fr 1fr;
   }
 }
 
 .average-ratings-section, .all-suggestions-section {
-  background-color: #fff;
+  background-color: var(--white);
   padding: 25px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-radius: 12px;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.07);
 }
 
 .average-ratings-section h2, .all-suggestions-section h2 {
   margin-top: 0;
-  color: #0d47a1;
+  color: var(--primary-blue);
   border-bottom: 2px solid #eee;
   padding-bottom: 15px;
   margin-bottom: 20px;
@@ -43,13 +44,21 @@
 .rating-question {
   flex: 1;
   padding-right: 15px;
+  font-weight: 500;
 }
 
 .rating-score {
   font-weight: bold;
   font-size: 1.1rem;
-  color: #ff9800;
+  color: var(--accent-gold);
   white-space: nowrap;
+}
+
+/* Styling untuk daftar saran */
+.suggestions-list {
+    max-height: 600px; /* Beri tinggi maksimal agar bisa di-scroll jika terlalu banyak */
+    overflow-y: auto;
+    padding-right: 10px;
 }
 
 .suggestion-card-full {
@@ -57,6 +66,7 @@
   padding: 15px;
   border-radius: 5px;
   margin-bottom: 15px;
+  border: 1px solid #e9ecef;
 }
 
 .suggestion-card-full p {
@@ -65,17 +75,19 @@
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3; /* Batasi 3 baris */
+  -webkit-line-clamp: 3; /* Batasi teks menjadi 3 baris secara default */
+  line-height: 1.6;
 }
 
+/* Hapus batasan baris jika diperluas */
 .suggestion-card-full p.expanded {
-  -webkit-line-clamp: unset; /* Hapus batasan jika diperluas */
+  -webkit-line-clamp: unset; 
 }
 
 .suggestion-card-full button {
   background: none;
   border: none;
-  color: #007bff;
+  color: var(--secondary-blue);
   cursor: pointer;
   padding: 5px 0 0 0;
   font-weight: bold;
@@ -85,8 +97,9 @@
 .suggestion-card-full small {
   display: block;
   margin-top: 10px;
-  color: #6c757d;
+  color: var(--text-light);
   text-align: right;
+  font-size: 0.8rem;
 }
 
 .back-to-home-button {
@@ -94,5 +107,11 @@
   margin-top: 30px;
   text-decoration: none;
   font-weight: bold;
-  color: #007bff;
+  color: var(--secondary-blue);
+  font-size: 1.1rem;
+  transition: color 0.2s;
+}
+
+.back-to-home-button:hover {
+    color: var(--primary-blue);
 }
