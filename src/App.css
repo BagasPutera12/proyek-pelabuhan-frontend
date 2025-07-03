@@ -30,7 +30,7 @@ main.container {
 .hero-section {
   background-image: 
     linear-gradient(rgba(10, 77, 104, 0.85), rgba(10, 77, 104, 0.85)), 
-    url('https://cdn.antaranews.com/cache/1200x800/2020/09/24/IMG_20200924_114324.jpg'); /* <-- GAMBAR TELUK BAYUR */
+    url('https://maritimnews.com/wp-content/uploads/2022/11/IMG-20221125-WA0031-1024x576.jpg'); /* <-- GAMBAR TELUK BAYUR */
   background-size: cover;
   background-position: center 60%; /* Sedikit menurunkan posisi gambar */
   color: var(--white);
