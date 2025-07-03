@@ -1,4 +1,5 @@
-// frontend/src/pages/HomePage.jsx
+// frontend/src/pages/HomePage.jsx (PERBAIKAN FINAL UNTUK HEROKU)
+
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -19,6 +20,7 @@ const StarRatingDisplay = ({ rating }) => {
 };
 
 function HomePage() {
+  const [ships, setShips] = useState([]);
   const [summary, setSummary] = useState({ overallAverage: 0, aspectAverages: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,21 +28,35 @@ function HomePage() {
   const [selectedAspect, setSelectedAspect] = useState(null);
 
   const fetchData = useCallback(async () => {
-    setLoading(true);
+    // Jangan set loading di sini agar tidak berkedip saat refresh
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/aspect-ratings/summary`);
-      if (response.data) {
-        setSummary(response.data);
+      // --- BAGIAN YANG DIUBAH ---
+      // Minta data kapal, tunggu sampai selesai.
+      const shipsResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/ships`);
+      if (Array.isArray(shipsResponse.data)) {
+        setShips(shipsResponse.data);
+      } else {
+        setShips([]);
       }
+
+      // SETELAH data kapal selesai, BARU minta data summary.
+      const summaryResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/port-surveys/summary`);
+      if (summaryResponse.data) {
+        setSummary(summaryResponse.data);
+      }
+      // --- AKHIR BAGIAN YANG DIUBAH ---
+
     } catch (err) {
-      console.error('Gagal mengambil data summary:', err);
-      setError('Gagal mengambil data dari server.');
+      console.error('Gagal mengambil data:', err);
+      setError('Gagal mengambil data dari server. Coba refresh halaman.');
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
+    // Kita panggil fetchData hanya sekali saat halaman dimuat
+    setLoading(true);
     fetchData();
   }, [fetchData]);
 
@@ -80,6 +96,7 @@ function HomePage() {
             {ASPECTS.map((aspect) => {
               const aspectData = summary.aspectAverages.find(a => a.aspect === aspect.name);
               const rating = aspectData ? aspectData.averageRating : 0;
+
               return (
                 <div key={aspect.name} className="aspect-card" onClick={() => handleOpenModal(aspect)}>
                   <h3>{aspect.name}</h3>
