@@ -1,4 +1,4 @@
-// frontend/src/pages/HomePage.jsx (FINAL DENGAN FETCH BERURUTAN)
+// frontend/src/pages/HomePage.jsx (PERBAIKAN FINAL UNTUK RENDER)
 
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
@@ -27,24 +27,19 @@ function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAspect, setSelectedAspect] = useState(null);
 
-  // --- BAGIAN UTAMA YANG DIPERBAIKI ---
   const fetchData = useCallback(async () => {
-    // Jangan set loading di sini agar tidak berkedip saat refresh
     try {
-      // 1. Minta data kapal DULU, dan tunggu sampai selesai
       const shipsResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/ships`);
+      const summaryResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/aspect-ratings/summary`);
+
       if (Array.isArray(shipsResponse.data)) {
         setShips(shipsResponse.data);
       } else {
         setShips([]);
       }
-      
-      // 2. SETELAH data kapal berhasil didapat, BARU minta data summary
-      const summaryResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/port-surveys/summary`);
       if (summaryResponse.data) {
         setSummary(summaryResponse.data);
       }
-
     } catch (err) {
       console.error('Gagal mengambil data:', err);
       setError('Gagal mengambil data dari server. Coba refresh halaman.');
@@ -52,7 +47,6 @@ function HomePage() {
       setLoading(false);
     }
   }, []);
-  // --- AKHIR BAGIAN YANG DIPERBAIKI ---
 
   useEffect(() => {
     setLoading(true);
@@ -69,6 +63,13 @@ function HomePage() {
     setSelectedAspect(null);
     fetchData(); 
   };
+  
+  // --- BAGIAN YANG DIPERBAIKI ---
+  // Kita pastikan bahwa 'summary' dan 'summary.averageRatings' ada sebelum dihitung.
+  const overallAverage = summary?.averageRatings?.length > 0
+    ? summary.aspectAverages.reduce((total, item) => total + item.averageRating, 0) / summary.aspectAverages.length
+    : 0;
+  // --- AKHIR BAGIAN YANG DIPERBAIKI ---
 
   if (loading) return <div className="container" style={{textAlign: 'center'}}><h1>Loading...</h1></div>;
   if (error) return <div className="container" style={{textAlign: 'center'}}><h1>{error}</h1></div>;
@@ -82,9 +83,9 @@ function HomePage() {
             Pelabuhan Teluk Bayur, yang terletak di Kota Padang, Sumatera Barat, merupakan salah satu pelabuhan tertua di Indonesia dan pintu gerbang utama arus barang ekspor-impor di wilayah barat Sumatera. Dibangun sejak 1893 dan kini dikelola oleh PT Pelindo (Persero), pelabuhan ini telah menerapkan standar pelayanan berbasis ISO 9002. Survei ini disusun berdasarkan Peraturan Menteri Perhubungan Nomor PM 37 Tahun 2015 tentang Indeks Kepuasan Pengguna Jasa, guna mengukur dan meningkatkan kualitas pelayanan pelabuhan secara berkelanjutan.
           </p>
           <div className="overall-rating-summary">
-            <StarRatingDisplay rating={summary.overallAverage} />
+            <StarRatingDisplay rating={overallAverage} />
             <p className="overall-rating-text">
-              Rating Keseluruhan: <strong>{summary.overallAverage.toFixed(2)}</strong> dari 5
+              Rating Keseluruhan: <strong>{overallAverage.toFixed(2)}</strong> dari 5
             </p>
           </div>
         </section>
@@ -95,7 +96,6 @@ function HomePage() {
             {ASPECTS.map((aspect) => {
               const aspectData = (summary.aspectAverages || []).find(a => a.aspect === aspect.name);
               const rating = aspectData ? aspectData.averageRating : 0;
-
               return (
                 <div key={aspect.name} className="aspect-card" onClick={() => handleOpenModal(aspect)}>
                   <h3>{aspect.name}</h3>
