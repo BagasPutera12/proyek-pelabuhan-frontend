@@ -1,0 +1,93 @@
+// frontend/src/data/surveyData.js
+
+export const ASPECTS = [
+  {
+    name: "Keamanan & Keselamatan",
+    indicators: [
+      "Saya merasa informasi tentang prosedur keamanan di pelabuhan mudah diakses.",
+      "Saya melihat adanya papan informasi yang jelas mengenai langkah-langkah darurat.",
+      "Saya merasa aman berkat kehadiran fasilitas informasi terkait keamanan.",
+      "Fasilitas informasi dan kesehatan", // Ini akan kita perbaiki nanti
+      "Saya menemukan informasi kesehatan seperti lokasi ruang medis dengan mudah.",
+      "Saya merasa terbantu dengan adanya panduan kesehatan yang terpampang di area publik.",
+      "Saya tahu harus ke mana jika mengalami gangguan kesehatan di pelabuhan.",
+      "Pos dan personel keamanan",
+      "Saya melihat petugas keamanan berjaga di beberapa titik strategis.",
+      "Saya merasa aman karena kehadiran pos keamanan yang aktif.",
+      "Saya mudah menemukan personel keamanan jika membutuhkan bantuan.",
+      "Peralatan dan pendukung keamanan",
+      "Saya melihat alat pemindai dan kamera CCTV berfungsi dengan baik.",
+      "Saya merasa aman karena peralatan keamanan tersedia di berbagai lokasi.",
+      "Saya percaya bahwa pelabuhan telah menerapkan teknologi pendukung keamanan yang memadai."
+    ]
+  },
+  {
+    name: "Fasilitas",
+    indicators: [
+        "Toilet tersedia dalam jumlah cukup dan dalam kondisi bersih.",
+        "Tempat ibadah (musholla) tersedia dan dalam kondisi layak.",
+        "Area parkir cukup luas dan kendaraan dapat keluar-masuk dengan lancar.",
+        "Tersedia trolley dan porter yang mudah dikenali dan berfungsi baik.",
+        "Ruang pelayanan kesehatan tersedia dalam kondisi bersih dan lengkap.",
+        "Area khusus merokok tersedia bagi penumpang.",
+        "Fasilitas khusus seperti tandu tersedia untuk penyandang difabel.",
+        "Tersedia ruang khusus menyusui yang lengkap dan nyaman."
+    ]
+  },
+  {
+    name: "Kebersihan & Kenyamanan",
+    indicators: [
+      "Ruang tunggu bersih dan cukup luas untuk menampung penumpang.",
+      "Area boarding memiliki tempat duduk dan dijaga kebersihannya.",
+      "Penerangan di area terminal memadai untuk kenyamanan pengguna.",
+      "Suhu ruangan dijaga maksimal 27°C dan sirkulasi udara baik.",
+      "Tempat sampah tersedia dalam kondisi bersih dan tidak berbau."
+    ]
+  },
+  {
+    name: "Informasi & Komunikasi",
+    indicators: [
+      "Informasi jadwal kapal tersedia dan mudah dibaca di layar atau papan pengumuman.",
+      "Informasi pelayanan ditampilkan secara visual dan audio yang jelas.",
+      "Jadwal kedatangan/keberangkatan kapal disampaikan secara visual dan audio.",
+      "Informasi gangguan perjalanan diumumkan maksimal 10 menit setelah terjadi.",
+      "Informasi angkutan lanjutan mudah dilihat dan terbaca di terminal.",
+      "Tersedia meja informasi dan petugas yang fasih berbahasa Inggris."
+    ]
+  },
+  {
+    name: "Aksesibilitas & Proses",
+    indicators: [
+      "Mesin cetak tiket tersedia dan pencetakan dilakukan kurang dari 5 menit.",
+      "Kemudahan memperoleh tiket",
+      "Saya mendapatkan tiket dengan mudah melalui sistem yang tersedia.",
+      "Saya tidak mengalami antrean panjang saat membeli tiket.",
+      "Saya merasa proses pemesanan tiket sangat efisien.",
+      "Naik turun penumpang dari dan ke kapal",
+      "Saya merasa proses naik dan turun kapal berlangsung tertib dan aman.",
+      "Saya tidak mengalami kesulitan saat berpindah dari dermaga ke kapal.",
+      "Saya dibantu oleh petugas saat naik atau turun kapal.",
+      "Tersedia tangga embarkasi dan debarkasi yang beratap.",
+      "Gate",
+      "Saya merasa proses masuk melalui gate berjalan lancar.",
+      "Saya melihat gate dijaga oleh petugas yang sigap.",
+      "Saya tidak kesulitan menemukan gate keberangkatan saya."
+    ]
+  },
+  {
+    name: "Pelayanan Petugas",
+    indicators: [
+      "Saya merasa dilayani dengan baik oleh petugas selama berada di pelabuhan.",
+      "Saya tidak mengalami kebingungan karena fasilitas layanan mudah diakses.",
+      "Saya puas dengan kecepatan dan sikap pelayanan dari staf pelabuhan.",
+      "Pelayanan petugas kapal",
+      "Saya merasa petugas kapal membantu saya dengan ramah.",
+      "Saya mendapatkan informasi yang saya butuhkan dari awak kapal.",
+      "Saya merasa pelayanan di atas kapal sangat profesional.",
+      "Pelayanan bagasi",
+      "Saya merasa bagasi saya ditangani dengan aman dan rapi.",
+      "Saya tidak mengalami kehilangan atau kerusakan pada barang bawaan.",
+      "Saya merasa pelayanan penanganan bagasi cukup cepat dan efisien."
+    ]
+  }
+];
