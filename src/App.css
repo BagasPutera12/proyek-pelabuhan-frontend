@@ -1,97 +1,130 @@
-/* frontend/src/App.css (VERSI FINAL) */
+/* frontend/src/App.css (VERSI FINAL DENGAN DEKORASI) */
+
+/* 1. Definisi Tema Warna Biru */
 :root {
-  --primary-blue: #0D47A1;
-  --secondary-blue: #1E88E5;
-  --light-blue: #BBDEFB;
-  --accent-gold: #ffc107;
-  --text-dark: #212121;
-  --text-light: #757575;
-  --bg-light: #f5f8fa;
+  --primary-blue: #0A4D68;  /* Biru tua untuk judul & elemen penting */
+  --secondary-blue: #088395; /* Biru cerah untuk link & tombol */
+  --light-blue-bg: #F0F8FF; /* Biru sangat muda untuk latar belakang */
+  --accent-gold: #FFC107;   /* Kuning emas untuk bintang & highlight */
+  --text-dark: #34495e;     /* Abu-abu tua untuk teks */
+  --text-light: #7f8c8d;    /* Abu-abu muda untuk sub-teks */
   --white: #ffffff;
-  --border-color: #e0e0e0;
+  --border-color: #e7eaf3;
 }
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  background-color: var(--bg-light);
+  background-color: var(--light-blue-bg); /* Menggunakan warna latar biru muda */
   color: var(--text-dark);
   margin: 0;
 }
+
 main.container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
 }
+
+/* 2. Hero Section dengan Gambar Pelabuhan Teluk Bayur */
 .hero-section {
-  background-image: linear-gradient(rgba(13, 71, 161, 0.8), rgba(13, 71, 161, 0.8)), url('https://images.unsplash.com/photo-1599846433833-372720239c49?q=80&w=1932&auto=format&fit=crop');
+  background-image: 
+    linear-gradient(rgba(10, 77, 104, 0.85), rgba(10, 77, 104, 0.85)), 
+    url('https://cdn.antaranews.com/cache/1200x800/2020/09/24/IMG_20200924_114324.jpg'); /* <-- GAMBAR TELUK BAYUR */
   background-size: cover;
-  background-position: center;
+  background-position: center 60%; /* Sedikit menurunkan posisi gambar */
   color: var(--white);
   text-align: center;
-  padding: 60px 20px;
+  padding: 80px 20px;
+  border-bottom: 5px solid var(--accent-gold);
 }
+
 .hero-section h1 {
-  font-size: 2.8rem;
-  font-weight: 700;
+  font-size: 3rem;
+  font-weight: 800;
   margin-top: 0;
   margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
+
 .hero-section .intro-text {
   max-width: 800px;
   margin: 0 auto 30px auto;
   font-size: 1.1rem;
-  line-height: 1.6;
-  opacity: 0.9;
+  line-height: 1.7;
+  opacity: 0.95;
 }
+
 .overall-rating-summary {
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 20px;
   display: inline-block;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
+
 .star-rating-display {
   font-size: 2.5rem;
   color: rgba(255, 255, 255, 0.4);
   margin-bottom: 5px;
 }
+
 .star-rating-display .filled {
   color: var(--accent-gold);
 }
+
 .overall-rating-text {
   margin: 0;
   font-weight: 500;
   opacity: 0.9;
 }
+
+/* 3. Judul Aspek dengan Ikon Jangkar */
 .aspects-title {
   text-align: center;
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: var(--primary-blue);
   margin-bottom: 40px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
 }
+
+.aspects-title::before {
+  content: url('https://api.iconify.design/twemoji/anchor.svg?width=40'); /* <-- IKON JANGKAR */
+}
+
 .aspects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 30px;
 }
+
 .aspect-card {
   background-color: var(--white);
   border-radius: 12px;
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.07);
-  padding: 25px;
+  padding: 30px;
   text-align: center;
   transition: all 0.3s ease;
   cursor: pointer;
+  border-top: 5px solid var(--secondary-blue);
 }
+
 .aspect-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
 }
+
 .aspect-card h3 {
   font-size: 1.5rem;
   color: var(--primary-blue);
   margin-top: 0;
   margin-bottom: 15px;
 }
+
 .aspect-card .star-rating-display {
     font-size: 1.8rem;
     color: #e0e0e0;
@@ -103,4 +136,42 @@ main.container {
     margin: 5px 0 0 0;
     color: var(--text-light);
     font-weight: 500;
+}
+
+/* Tombol Survei Utama */
+.port-survey-section {
+  background-color: var(--white);
+  padding: 40px;
+  margin-top: 60px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.07);
+}
+
+.port-survey-section h2 {
+  margin-top: 0;
+  color: var(--primary-blue);
+}
+
+.open-survey-button {
+  background-color: var(--secondary-blue);
+  color: var(--white);
+  border: none;
+  padding: 15px 35px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(30, 136, 229, 0.4);
+}
+
+.open-survey-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(30, 136, 229, 0.5);
+}
+
+/* Styling lainnya (tidak perlu diubah dari sebelumnya) */
+.survey-summary-section, .suggestion-card, .view-all-button {
+    /* Styling ini sudah ada dan bagus */
 }
