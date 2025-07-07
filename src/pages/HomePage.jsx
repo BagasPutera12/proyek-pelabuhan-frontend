@@ -1,10 +1,11 @@
-// frontend/src/pages/HomePage.jsx (PERBAIKAN FINAL UNTUK RENDER)
+// frontend/src/pages/HomePage.jsx (FINAL DENGAN LINK KE HALAMAN SURVEI)
 
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css'; 
-import PortSurveyModal from '../components/PortSurveyModal';
+// PortSurveyModal sudah tidak digunakan di halaman ini, jadi bisa dihapus
+// import PortSurveyModal from '../components/PortSurveyModal'; 
 import { ASPECTS } from '../data/surveyData.js';
 
 const StarRatingDisplay = ({ rating }) => {
@@ -20,23 +21,18 @@ const StarRatingDisplay = ({ rating }) => {
 };
 
 function HomePage() {
-  const [ships, setShips] = useState([]);
   const [summary, setSummary] = useState({ overallAverage: 0, aspectAverages: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedAspect, setSelectedAspect] = useState(null);
+
+  // State dan fungsi untuk modal sudah tidak diperlukan lagi di sini
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [selectedAspect, setSelectedAspect] = useState(null);
 
   const fetchData = useCallback(async () => {
     try {
-      const shipsResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/ships`);
+      // Kita hanya perlu mengambil data summary di halaman ini
       const summaryResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/aspect-ratings/summary`);
-
-      if (Array.isArray(shipsResponse.data)) {
-        setShips(shipsResponse.data);
-      } else {
-        setShips([]);
-      }
       if (summaryResponse.data) {
         setSummary(summaryResponse.data);
       }
@@ -53,23 +49,11 @@ function HomePage() {
     fetchData();
   }, [fetchData]);
 
-  const handleOpenModal = (aspect) => {
-    setSelectedAspect(aspect);
-    setIsModalOpen(true);
-  };
+  // Fungsi handleOpenModal dan handleCloseModal sudah dihapus
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedAspect(null);
-    fetchData(); 
-  };
-  
-  // --- BAGIAN YANG DIPERBAIKI ---
-  // Kita pastikan bahwa 'summary' dan 'summary.averageRatings' ada sebelum dihitung.
   const overallAverage = summary?.averageRatings?.length > 0
     ? summary.aspectAverages.reduce((total, item) => total + item.averageRating, 0) / summary.aspectAverages.length
     : 0;
-  // --- AKHIR BAGIAN YANG DIPERBAIKI ---
 
   if (loading) return <div className="container" style={{textAlign: 'center'}}><h1>Loading...</h1></div>;
   if (error) return <div className="container" style={{textAlign: 'center'}}><h1>{error}</h1></div>;
@@ -91,13 +75,14 @@ function HomePage() {
         </section>
 
         <main className="container">
-          <h2 className="aspects-title">Klik untuk Memberi Penilaian per Aspek</h2>
+          <h2 className="aspects-title">Penilaian per Aspek</h2>
           <div className="aspects-grid">
             {ASPECTS.map((aspect) => {
               const aspectData = (summary.aspectAverages || []).find(a => a.aspect === aspect.name);
               const rating = aspectData ? aspectData.averageRating : 0;
               return (
-                <div key={aspect.name} className="aspect-card" onClick={() => handleOpenModal(aspect)}>
+                // Kartu aspek tidak lagi bisa diklik untuk membuka modal
+                <div key={aspect.name} className="aspect-card">
                   <h3>{aspect.name}</h3>
                   <StarRatingDisplay rating={rating} />
                   <p>({rating.toFixed(2)})</p>
@@ -105,15 +90,21 @@ function HomePage() {
               );
             })}
           </div>
+
+          {/* --- INI BAGIAN BARU YANG DITAMBAHKAN --- */}
+          <section className="port-survey-section">
+            <h2>Bantu Kami Menjadi Lebih Baik</h2>
+            <p>Bagaimana pendapat Anda mengenai fasilitas dan pelayanan di pelabuhan kami? Ikuti survei kepuasan lengkap melalui tombol di bawah ini.</p>
+            <Link to="/survei-lengkap" className="open-survey-button">
+              Mulai Isi Survei
+            </Link>
+          </section>
+          {/* --- AKHIR BAGIAN BARU --- */}
+          
         </main>
       </div>
 
-      {isModalOpen && (
-        <PortSurveyModal 
-          aspect={selectedAspect}
-          onClose={handleCloseModal}
-        />
-      )}
+      {/* Bagian untuk render modal sudah dihapus */}
     </>
   );
 }

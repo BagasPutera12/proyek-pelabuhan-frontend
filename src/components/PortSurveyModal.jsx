@@ -84,7 +84,10 @@ function PortSurveyModal({ aspect, onClose }) {
                       <button 
                         key={ratingValue}
                         className={`rating-button ${answers[indicator] === ratingValue ? 'selected' : ''}`}
-                        onClick={() => handleRatingChange(indicator, ratingValue)}
+                        onClick={(e) => {
+  e.stopPropagation(); // Mencegah klik "menembus" ke latar belakang
+  handleRatingChange(indicator, ratingValue);
+}}
                       >
                         {ratingValue}
                       </button>

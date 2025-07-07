@@ -8,7 +8,7 @@ import HomePage from './pages/HomePage';
 import ShipListPage from './pages/ShipListPage'; // Halaman baru untuk daftar kapal
 import ShipDetailPage from './pages/ShipDetailPage';
 import FeedbackPage from './pages/FeedbackPage';
-
+import FullSurveyPage from './pages/FullSurveyPage'
 import './App.css';
 
 function App() {
@@ -18,6 +18,7 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/survei-lengkap" element={<FullSurveyPage />} />
           <Route path="/kapal" element={<ShipListPage />} /> {/* Rute baru untuk daftar kapal */}
           <Route path="/kapal/:id" element={<ShipDetailPage />} /> {/* Ubah dari /ship ke /kapal */}
           <Route path="/masukan" element={<FeedbackPage />} />
