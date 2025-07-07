@@ -109,7 +109,6 @@ main.container {
   padding: 30px;
   text-align: center;
   transition: all 0.3s ease;
-  cursor: pointer;
   border-top: 5px solid var(--secondary-blue);
 }
 
